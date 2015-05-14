@@ -1,0 +1,26 @@
+install:
+pip install shadowsocks
+
+server command:
+    ssserver -p 5230 -k woshijay -m rc4-md5 -d start
+
+client command:
+    sslocal -s 服务器地址 -p 服务器端口 -l 本地端端口 -k 密码 -m 加密方法
+    (sslocal -s 45.55.130.148 -p 5230 -l 127.0.0.1 -k woshijay -m rc4-md5)
+或者:
+
+/etc/shadowsocks/config.json
+{
+	"server":"remote-shadowsocks-server-ip-addr",
+	"server_port":443,
+	"local_address":"127.0.0.1",
+	"local_port":1080,
+	"password":"your-passwd",
+	"timeout":300,
+	"method":"aes-256-cfb",
+	"fast_open":false,
+	"workers":1
+}
+在config.json同目录下启动sudo sslocal -d start
+或者指定config.json路径
+sudo sslocal -c /etc/shadowsocks/config.json -d start
