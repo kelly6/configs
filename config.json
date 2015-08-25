@@ -1,0 +1,9 @@
+{
+    "server":"104.250.144.10",
+    "server_port":18346,
+    "local_address":"0.0.0.0",
+    "local_port":5232,
+    "password":"16654071",
+    "method":"AES-256-CFB",
+    "workers":1
+}
