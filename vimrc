@@ -16,6 +16,7 @@ Bundle 'Indent-Guides'
 Bundle 'Shougo/neocomplete.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'godlygeek/tabular'
+Bundle 'tomasr/molokai'
 
 " original repos on github
 Bundle 'tpope/vim-fugitive'
@@ -26,7 +27,7 @@ Bundle 'tpope/vim-rails.git'
 Bundle 'L9'
 Bundle 'FuzzyFinder'
 " non github repos
-Bundle 'git://git.wincent.com/command-t.git'
+" Bundle 'git://git.wincent.com/command-t.git'
 " ...
 
 filetype plugin indent on     " required!
@@ -61,6 +62,7 @@ set showmatch		" Show matching brackets.
 if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
+"syntax on
 set number
 set tabstop=4
 set softtabstop=4
@@ -68,7 +70,8 @@ set shiftwidth=4
 set autoindent
 set cindent
 set smartindent
-set syntax=c
+"set syntax=cpp
+"set syntax=python
 set foldmethod=indent
 set ff=unix
 set nocp
@@ -192,5 +195,14 @@ endif
 " https://github.com/c9s/perlomni.vim
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
+syntax enable
+
+" colorscheme corporation
+" colorscheme solarized
+" colorscheme molokai
+"colorscheme inkpot
+colorscheme desert
+let g:rehash256 = 1
+
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
