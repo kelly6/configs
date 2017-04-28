@@ -13,10 +13,11 @@ Bundle 'gmarik/vundle'
 Bundle 'jlanzarotta/bufexplorer'
 Bundle 'Mark'
 Bundle 'Indent-Guides'
-Bundle 'Shougo/neocomplete.vim'
+" Bundle 'Shougo/neocomplete.vim'
 Bundle 'scrooloose/nerdtree'
 Bundle 'godlygeek/tabular'
 Bundle 'tomasr/molokai'
+Plugin 'jnurmine/Zenburn'
 
 " original repos on github
 Bundle 'tpope/vim-fugitive'
@@ -94,11 +95,15 @@ iab ad advertisement
 iab printf printf(");<LEFT><LEFT><C-R>=Eatchar('\s')<CR>
 iab scanf scanf(");<LEFT><LEFT><C-R>=Eatchar('\s')<CR>
 iab printfl printf("%s:%d\n", __FUNCTION__, __LINE__);<LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><LEFT><C-R>=Eatchar('\s')<CR>
+iab debuglog log.loggers["debug"].debug("")<LEFT><LEFT><C-R>=Eatchar('\s')<CR>
+iab errorlog log.loggers["error"].error("")<LEFT><LEFT><C-R>=Eatchar('\s')<CR>
 imap jj <esc>
 let mapleader = ','
-map tt :w,be:set nu
+map tt :w
+,be:set nu
 map tree :NERDTree
 autocmd FileType c,cpp iab if if<SPACE>()<LEFT><C-R>=Eatchar('\s')<CR>
+autocmd FileType c,cpp iab for for<SPACE>(int i = 0; i < .size(); i++) {<CR>}<UP><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><RIGHT><LEFT><C-R>=Eatchar('\s')<CR>
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_guide_size = 1 
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
@@ -108,27 +113,27 @@ hi IndentGuidesEven guibg=green ctermbg=4
 
 "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
 " Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-
-" Define dictionary.
-let g:neocomplete#sources#dictionary#dictionaries = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell_hist',
-    \ 'scheme' : $HOME.'/.gosh_completions'
-        \ }
-
-" Define keyword.
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+" let g:acp_enableAtStartup = 0
+" " Use neocomplete.
+" let g:neocomplete#enable_at_startup = 1
+" " Use smartcase.
+" let g:neocomplete#enable_smart_case = 1
+" " Set minimum syntax keyword length.
+" let g:neocomplete#sources#syntax#min_keyword_length = 3
+" let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+" 
+" " Define dictionary.
+" let g:neocomplete#sources#dictionary#dictionaries = {
+"     \ 'default' : '',
+"     \ 'vimshell' : $HOME.'/.vimshell_hist',
+"     \ 'scheme' : $HOME.'/.gosh_completions'
+"         \ }
+" 
+" " Define keyword.
+" if !exists('g:neocomplete#keyword_patterns')
+"     let g:neocomplete#keyword_patterns = {}
+" endif
+" let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
 nmap OD h
 nmap OC l
@@ -136,24 +141,24 @@ nmap OA k
 nmap OB j
 
 " Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
+" inoremap <expr><C-g>     neocomplete#undo_completion()
+" inoremap <expr><C-l>     neocomplete#complete_common_string()
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return neocomplete#close_popup() . "\<CR>"
+" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" function! s:my_cr_function()
+"   return neocomplete#close_popup() . "\<CR>"
   " For no inserting <CR> key.
   "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
+" endfunction
 " <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
+" inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+" inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+" inoremap <expr><C-y>  neocomplete#close_popup()
+" inoremap <expr><C-e>  neocomplete#cancel_popup()
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
@@ -184,25 +189,41 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 " Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
+" if !exists('g:neocomplete#sources#omni#input_patterns')
+"   let g:neocomplete#sources#omni#input_patterns = {}
+" endif
 "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
 " For perlomni.vim setting.
 " https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+" let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 syntax enable
 
 " colorscheme corporation
 " colorscheme solarized
 " colorscheme molokai
-"colorscheme inkpot
-colorscheme desert
+" colorscheme inkpot
+" colorscheme desert
+" colorscheme zenburn
 let g:rehash256 = 1
+let g:solarized_termcolors=256
+let g:solarized_underline = 0
+"set background=dark
+set backspace=1
+" set t_Co=256
+" highlight search ctermfg=230 ctermbg=22
+highlight Normal guibg=black ctermfg=230 ctermbg=black
+"set cursorline
+"hi cursorline cterm=NONE ctermbg=black ctermfg=grey
+"set cursorcolumn
+"hi cursorcolumn cterm=NONE ctermbg=black ctermfg=grey
 
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+let g:ycm_server_python_interpreter='/usr/bin/python2'
+let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/python/ycm/.ycm_extra_conf.py'
+
+au BufNewFile *.py 0r ~/.vim/py.template
